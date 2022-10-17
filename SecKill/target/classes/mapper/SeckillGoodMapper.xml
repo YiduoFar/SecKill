@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ayi.seckill.mapper.SeckillGoodMapper">
+
+    <select id="selectGoodVoPage" resultType="java.util.Map">
+        SELECT sg.id,
+               sg.seckill_price,
+               sg.stock_count,
+               sg.start_date,
+               sg.end_date,
+               g.id good_id,
+               g.good_img,
+               g.good_name,
+               g.good_title,
+               g.good_price,
+               g.good_detail,
+               g.good_pay_num,
+               g.good_stock
+        FROM seckill_good sg
+                 LEFT JOIN good g ON sg.good_id = g.id
+            ${ew.customSqlSegment}
+    </select>
+
+    <resultMap id="BaseResultMap" type="com.ayi.seckill.domain.SeckillGood">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="goodId" column="good_id" jdbcType="BIGINT"/>
+        <result property="seckillPrice" column="seckill_price" jdbcType="DECIMAL"/>
+        <result property="stockCount" column="stock_count" jdbcType="INTEGER"/>
+        <result property="startDate" column="start_date" jdbcType="TIMESTAMP"/>
+        <result property="endDate" column="end_date" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id
+        ,good_id,seckill_price,
+        stock_count,start_date,end_date
+    </sql>
+</mapper>

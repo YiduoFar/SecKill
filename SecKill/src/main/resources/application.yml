@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/seckill?useUnicode=true&charactorEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    username: "root"
+    password: "0126"
+  mvc:
+    static-path-pattern: /static/**
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.ayi.seckill.domain
+
+logging:
+  level:
+    com.ayi.seckill.mapper: debug
+
+server:
+  port: 8088
+
