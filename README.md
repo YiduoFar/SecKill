@@ -1,3 +1,3 @@
 SecKill是SpringBoot项目
 
-SecKill是Vue2项目
+SecKill_UI是Vue2项目
