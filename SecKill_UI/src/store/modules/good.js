@@ -15,14 +15,12 @@ export default ({
     mutations: {
     },
     actions: {
-        async queryAllSecKillGood(state, QueryVo) {
-            var data = await axios({
+        queryAllSecKillGood(state, QueryVo) {
+            return axios({
                 url: '/queryAllSecKillGood',
                 method: 'POST',
                 data: qs.stringify(QueryVo)
             })
-            console.log('data:', data);
-            return data
         }
     },
     modules: {

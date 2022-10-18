@@ -18,6 +18,7 @@ Vue.use(ElementUI)
 Vue.prototype.$axios = axios
 Vue.prototype.$qs = qs
 Vue.prototype.$md5 = md5
+Vue.prototype.$img_src = 'http://localhost:8088/static'
 // Vue.prototype.global = global // 不生效
 axios.defaults.baseURL = "http://localhost:8088"
 
@@ -40,9 +41,9 @@ axios.interceptors.request.use((req) => {
 axios.interceptors.response.use((res) => {
     //TODO:
     const { code, message, obj } = res.data;
-    console.log('code:', code);
-    console.log('message:', message);
-    console.log('data', obj);
+    console.log('code-->', code);
+    console.log('message-->', message);
+    console.log('data-->', obj);
     if (code === 200) {
         if (res.config.url == '/login') {
             return {code, obj}
