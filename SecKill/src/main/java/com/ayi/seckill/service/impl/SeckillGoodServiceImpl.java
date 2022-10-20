@@ -14,10 +14,12 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ayi.seckill.domain.SeckillGood;
 import com.ayi.seckill.service.SeckillGoodService;
 import com.ayi.seckill.mapper.SeckillGoodMapper;
+import io.netty.util.internal.ObjectUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 
 import java.util.Collections;
 import java.util.List;
@@ -56,6 +58,15 @@ public class SeckillGoodServiceImpl extends ServiceImpl<SeckillGoodMapper, Secki
         }
 
         return RespBean.success(records);
+    }
+
+    @Override
+    public RespBean selectById(Integer id) {
+       GoodVo goodVo = seckillGoodMapper.selectGoodVoBySecKillGoodId(new QueryWrapper<>().eq("sg.id", id));
+       if (ObjectUtils.isEmpty(goodVo)) {
+           return RespBean.error(RespBeanEnum.NULL_DATA_ERROR);
+       }
+       return RespBean.success(goodVo);
     }
 }
 

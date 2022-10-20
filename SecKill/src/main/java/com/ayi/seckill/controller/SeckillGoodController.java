@@ -45,6 +45,13 @@ public class SeckillGoodController extends ApiController {
     }
 
     /**
+     * 根据id查询
+     */
+    @GetMapping("/querySecKillGoodById")
+    public RespBean selectById(@RequestParam("id") Integer id) {
+        return seckillGoodService.selectById(id);
+    }
+    /**
      * 分页查询所有数据
      *
      * @param page        分页对象

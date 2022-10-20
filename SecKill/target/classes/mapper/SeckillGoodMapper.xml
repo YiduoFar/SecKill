@@ -4,7 +4,26 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ayi.seckill.mapper.SeckillGoodMapper">
 
-    <select id="selectGoodVoPage" resultType="java.util.Map">
+    <select id="selectGoodVoPage" resultType="com.ayi.seckill.vo.GoodVo">
+        SELECT sg.id,
+               sg.seckill_price,
+               sg.stock_count,
+               sg.start_date,
+               sg.end_date,
+               g.id good_id,
+               g.good_img,
+               g.good_name,
+               g.good_title,
+               g.good_price,
+               g.good_detail,
+               g.good_pay_num,
+               g.good_stock
+        FROM seckill_good sg
+                 LEFT JOIN good g ON sg.good_id = g.id
+            ${ew.customSqlSegment}
+    </select>
+
+    <select id="selectGoodVoBySecKillGoodId"  resultType="com.ayi.seckill.vo.GoodVo">
         SELECT sg.id,
                sg.seckill_price,
                sg.stock_count,

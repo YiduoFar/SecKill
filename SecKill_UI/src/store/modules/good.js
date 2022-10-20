@@ -21,7 +21,17 @@ export default ({
                 method: 'POST',
                 data: qs.stringify(QueryVo)
             })
-        }
+        },
+        querySecKillGoodById(state, id) {
+            console.log(id);
+            return axios({
+                url: '/querySecKillGoodById',
+                method: 'GET',
+                params: {
+                    id: id
+                }
+            })
+        },
     },
     modules: {
     }

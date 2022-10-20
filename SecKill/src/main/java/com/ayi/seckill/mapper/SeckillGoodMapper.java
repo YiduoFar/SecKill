@@ -33,6 +33,7 @@ public interface SeckillGoodMapper extends BaseMapper<SeckillGood> {
     @MapKey("id")
     IPage<Map<String, Object>> selectGoodVoPage(Page page, @Param(Constants.WRAPPER) Wrapper queryWrapper);
 
+    GoodVo selectGoodVoBySecKillGoodId(@Param(Constants.WRAPPER) Wrapper queryWrapper);
 }
 
 

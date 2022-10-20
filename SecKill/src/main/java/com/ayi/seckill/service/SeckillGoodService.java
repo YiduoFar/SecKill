@@ -13,4 +13,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface SeckillGoodService extends IService<SeckillGood> {
 
     RespBean selectByKeyWord(QueryVo queryVo);
+
+    RespBean selectById(Integer id);
 }

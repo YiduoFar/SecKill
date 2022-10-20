@@ -2,55 +2,110 @@
   <div class="main">
     <!-- <div class="l" @click="hello">{{ data }}</div>
     <div class="l" @click="logout">LOGOUT</div> -->
-    <div class="middleDiv ">
-      <img src="../assets/img/bg.jpg" alt="" class="logo ">
-      <div class="queryDiv ">
-        <div class="queryDiv-box">
-          <input type="text" class="queryDiv-input" placeholder="搜索商品">
-          <div class="queryDiv-btn ">搜索</div>
+    <transition name="fade" :appear="true">
+      <div class="middleDiv " v-show="listToDetail">
+        <img src="../assets/img/bg.jpg" alt="" class="logo ">
+        <div class="queryDiv ">
+          <div class="queryDiv-box">
+            <input type="text" class="queryDiv-input" placeholder="搜索商品">
+            <div class="queryDiv-btn ">搜索</div>
+          </div>
         </div>
-      </div>
-      <div class="goodListDiv">
-        <div class="goodDiv" v-for="(g, index) in goodList" :key="index">
-          <!-- 图片 -->
-          <div class="good-img">
-            <img class="img-css" :src="loadImage(g.good_img)" alt="">
-          </div>
-          <!-- 名字、标题 -->
-          <div class="good-name ">
-            <span style="font-weight: bold;">{{g.good_name}}</span>
-            <br>
-            {{g.good_title}}
-          </div>
-          <!-- 库存 -->
-          <div class="good_stock ">
-            库存量: <span style="color:tomato;">{{g.good_stock}}</span> 件
-          </div>
-          <!-- 付款人数 -->
-          <div class="good_pay_num">
-            <span style="color:#5a5a5a">{{(g.good_pay_num)}}+ 人付款</span>
-          </div>
-          <!-- 秒杀价、原价 -->
-          <div class="good_price">
-            <div style="color:#f30505;font-weight: bold;font-size:17px">秒杀价:{{g.seckill_price}}￥</div>
-            <div style="color:#5a5a5a;margin-top: 5px;text-decoration: line-through;">原价:{{g.good_price}}￥</div>
-          </div>
-          <!-- 跳转详情 -->
-          <div class="jump">
-            详情页>
+        <div class="goodListDiv">
+          <div class="goodDiv" v-for="(g, index) in goodList" :key="index">
+            <!-- 图片 -->
+            <div class="good-img">
+              <img class="img-css" :src="loadImage(g.goodImg)" alt="">
+            </div>
+            <!-- 名字、标题 -->
+            <div class="good-name ">
+              <span style="font-weight: bold;">{{g.goodName}}</span>
+              <br>
+              {{g.good_title}}
+            </div>
+            <!-- 库存 -->
+            <div class="good_stock ">
+              库存量: <span style="color:tomato;">{{g.goodStock}}</span> 件
+            </div>
+            <!-- 付款人数 -->
+            <div class="good_pay_num">
+              <span style="color:#5a5a5a">{{(g.goodPayNum)}}+ 人付款</span>
+            </div>
+            <!-- 秒杀价、原价 -->
+            <div class="good_price">
+              <div style="color:#f30505;font-weight: bold;font-size:17px">秒杀价:{{g.seckillPrice}}￥</div>
+              <div style="color:#5a5a5a;margin-top: 5px;text-decoration: line-through;">原价:{{g.goodPrice}}￥</div>
+            </div>
+            <!-- 跳转详情 -->
+            <div class="jump" @click="jumpToDetail(g.id)">
+              详情页>
+            </div>
+            <div class="goodLine"></div>
           </div>
           <div class="goodLine"></div>
         </div>
-        <div class="goodLine"></div>
+        <div class="pageBlock ">
+          <span class="demonstration"></span>
+          <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
+            :current-page="QueryVo.current" :page-sizes="[20, 50, 100, 200]" :page-size="QueryVo.size"
+            layout="total, sizes, prev, pager, next, jumper" :total="400">
+          </el-pagination>
+        </div>
       </div>
-      <div class="pageBlock ">
-        <span class="demonstration"></span>
-        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-          :current-page="QueryVo.current" :page-sizes="[20, 50, 100, 200]" :page-size="QueryVo.size"
-          layout="total, sizes, prev, pager, next, jumper" :total="400">
-        </el-pagination>
+    </transition>
+    <transition name="fade2" :appear="true">
+      <div class="middleDiv " v-show="!listToDetail">
+        <div class="DetailDiv ">
+          <div class="jumpBack " @click="jumpToList">&lt;- 返回</div>
+          <div class="detailDiv__inner ">
+            <!-- 详情图片 -->
+            <div class="detail-img">
+              <img class="detail-img-css" :src="loadImage(goodDetailFocus.goodImg)" alt="">
+            </div>
+            <!-- 名称 -->
+            <div class="detail-name ">
+              <span style="font-size: 25px;">{{goodDetailFocus.goodName}}</span>
+              <br>
+              <span style="font-size: 16px;">{{goodDetailFocus.goodTitle}}</span>
+            </div>
+            <!-- 价格 -->
+            <div class="detail-price ">
+              <span style="font-size: 25px;color: #f30505;font-weight: bold;">
+                秒杀价：
+                {{goodDetailFocus.seckillPrice}}.00￥
+              </span>
+              <br>
+              <span style="text-decoration: line-through;">
+                原价：
+                {{goodDetailFocus.goodPrice}}.00￥
+              </span>
+            </div>
+            <!-- 库存 -->
+            <div class="detail-stock ">
+              秒杀量:
+              <span style="font-weight:bold">{{goodDetailFocus.stock_count}}</span>
+              <br>
+              <span style="text-decoration:underline;"> 库存量:{{goodDetailFocus.good_stock}}+</span>
+            </div>
+            <!-- 时间 -->
+            <div class="detail-time ">
+              <span style="color: #000;">秒杀时间</span>
+              <br>
+              {{goodDetailFocus.startDate|formatDate('yyyy-MM-dd HH:mm:ss')}}（开始）
+              <br>
+              {{goodDetailFocus.endDate|formatDate('yyyy-MM-dd HH:mm:ss')}}（结束）
+            </div>
+            <!-- 商品详情 -->
+            <div class="detail-detail ">
+              <span style="font-size: 18px;font-weight: bold;color: #4d4d4d;">详情:</span>
+              {{goodDetailFocus.goodDetail}}
+              <br>
+              ......
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+    </transition>
   </div>
 </template>
 
@@ -62,17 +117,21 @@ export default {
     return {
       data: "123",
       goodList: [],
+      goodDetailFocus: {},
       QueryVo: {
         current: 1,
         size: 20,
         word: ''
       },
+      listToDetail: true,
     };
   },
+  components: {},
   computed: {
   },
   methods: {
     ...mapActions("good", ["queryAllSecKillGood"]),
+    ...mapActions("good", ["querySecKillGoodById"]),
     async hello() {
       this.data = await this.$request.get('/hello')
     },
@@ -87,12 +146,52 @@ export default {
     },
     loadImage(img) {
       return this.$img_src + img
+    },
+    async jumpToDetail(id) {
+      this.goodDetailFocus = await this.querySecKillGoodById(id);
+      console.log(this.goodDetailFocus);
+      this.listToDetail = !this.listToDetail
+    },
+    jumpToList() {
+      this.listToDetail = !this.listToDetail
     }
   },
   mounted: async function () {
     this.goodList = await this.queryAllSecKillGood(this.QueryVo)
     console.log('goodlist:', this.goodList);
   },
+  filters:{
+        formatDate: function(value,args) {
+            var dt = new Date(value);
+            if(args == 'yyyy-M-d') {// yyyy-M-d
+            let year = dt.getFullYear();
+            let month = dt.getMonth() + 1;
+            let date = dt.getDate();
+            return `${year}-${month}-${date}`;
+        } else if(args == 'yyyy-M-d H:m:s'){// yyyy-M-d H:m:s
+            let year = dt.getFullYear();
+            let month = dt.getMonth() + 1;
+            let date = dt.getDate();
+            let hour = dt.getHours();
+            let minute = dt.getMinutes();
+            let second = dt.getSeconds();
+            return `${year}-${month}-${date} ${hour}:${minute}:${second}`;
+        } else if(args == 'yyyy-MM-dd') {// yyyy-MM-dd
+            let year = dt.getFullYear();
+            let month = (dt.getMonth() + 1).toString().padStart(2,'0');
+            let date = dt.getDate().toString().padStart(2,'0');
+            return `${year}-${month}-${date}`;
+        } else {// yyyy-MM-dd HH:mm:ss
+            let year = dt.getFullYear();
+            let month = (dt.getMonth() + 1).toString().padStart(2,'0');
+            let date = dt.getDate().toString().padStart(2,'0');
+            let hour = dt.getHours().toString().padStart(2,'0');
+            let minute = dt.getMinutes().toString().padStart(2,'0');
+            let second = dt.getSeconds().toString().padStart(2,'0');
+            return `${year}-${month}-${date} ${hour}:${minute}:${second}`;
+        }
+        }
+    }
 };
 </script>
 
@@ -233,7 +332,8 @@ export default {
         width: 12%;
         height: 15%;
       }
-      .jump{
+
+      .jump {
         position: absolute;
         left: 90%;
         top: 14%;
@@ -243,8 +343,9 @@ export default {
         cursor: pointer;
         transition: all 0.5s;
       }
-      .jump:hover{
-        color: #217eb4;
+
+      .jump:hover {
+        color: #42a5df;
       }
     }
 
@@ -262,6 +363,112 @@ export default {
     position: absolute;
     top: 93%;
     left: 30%;
+  }
+}
+
+.DetailDiv {
+  margin: auto;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  position: absolute;
+  width: 90%;
+  height: 90%;
+
+  .jumpBack {
+    width: 8%;
+    height: 35px;
+    font-size: 22px;
+    text-align: center;
+    line-height: 35px;
+    position: absolute;
+    color: #830000;
+    transition: all 0.5s;
+    right: 0;
+    cursor: pointer;
+  }
+
+  .jumpBack:hover {
+    color: #c50000;
+  }
+
+  .detailDiv__inner {
+    position: relative;
+    margin: auto;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 70%;
+    height: 100%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+
+    .detail-img {
+      position: absolute;
+      width: 450px;
+      height: 450px;
+      border: #5a5a5a 1px solid;
+
+      .detail-img-css {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    .detail-name {
+      position: absolute;
+      top: 1%;
+      left: 46%;
+      width: 50%;
+      height: 10%;
+      overflow: hidden;
+    }
+
+    .detail-price {
+      position: absolute;
+      top: 13%;
+      left: 46%;
+      width: 30%;
+      height: 10%;
+      overflow: hidden;
+    }
+
+    .detail-stock{
+      position: absolute;
+      right: 4%;
+      top: 13%;
+      width: 15%;
+      height: 10%;
+      text-align: right;
+      font-size: 16px;
+      line-height: 28px;
+    }
+
+    .detail-time {
+      position: absolute;
+      top: 25%;
+      left: 46%;
+      width: 50%;
+      height: 15%;
+      overflow: hidden;
+      font-size: 21px;
+      line-height: 30px;
+      color: #127dd4;
+      // text-align: right;
+    }
+
+    .detail-detail {
+      position: absolute;
+      top: 56%;
+      width: 100%;
+      height: 30%;
+      overflow: hidden;
+      line-height: 25px;
+      color: #868686;
+    }
   }
 }
 
@@ -286,37 +493,74 @@ export default {
   background-color: rgba(158, 158, 158, 0.397);
 }
 
-.el-pager li:hover{
+
+/**element分页组件改变颜色 */
+.el-pager li:hover {
   color: #aa0000;
 }
 
-.el-pager li.active{
+.el-pager li.active {
   color: #aa0000;
 }
 
-.el-pagination .btn-next:hover, .el-pagination .btn-prev:hover{
+.el-pagination .btn-next:hover,
+.el-pagination .btn-prev:hover {
   color: #aa0000;
 }
 
-.el-pagination__sizes .el-input .el-input__inner:hover{
-  border: #aa0000 1px solid;
-}
-.el-select .el-input__inner:focus{
+.el-pagination__sizes .el-input .el-input__inner:hover {
   border: #aa0000 1px solid;
 }
 
-.el-range-editor.is-active, .el-range-editor.is-active:hover, .el-select .el-input.is-focus .el-input__inner{
+.el-select .el-input__inner:focus {
   border: #aa0000 1px solid;
 }
 
-.el-select-dropdown__item.selected{
+.el-range-editor.is-active,
+.el-range-editor.is-active:hover,
+.el-select .el-input.is-focus .el-input__inner {
+  border: #aa0000 1px solid;
+}
+
+.el-select-dropdown__item.selected {
   color: #aa0000;
 }
 
-.el-input.is-active .el-input__inner, .el-input__inner:focus{
+.el-input.is-active .el-input__inner,
+.el-input__inner:focus {
   border: #aa0000 1px solid;
 }
-// .el-pager li.btn-quicknext:hover, .el-pager li.btn-quickprev:hover{
-//   color: #aa0000;
-// }
+
+/**fade fade2 渐变效果 */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s;
+}
+
+.fade-leave-to,
+.fade-enter {
+  opacity: 0
+}
+
+.fade-enter-to,
+.fade-leave {
+  opacity: 1
+}
+
+
+
+.fade2-enter-active,
+.fade2-leave-active {
+  transition: opacity 0.5s;
+}
+
+.fade2-enter-to,
+.fade2-leave {
+  opacity: 1
+}
+
+.fade2-leave-to,
+.fade2-enter {
+  opacity: 0
+}
 </style>
