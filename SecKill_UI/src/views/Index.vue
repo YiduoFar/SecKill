@@ -103,6 +103,23 @@
               ......
             </div>
           </div>
+          <!-- 秒杀状态 按钮 -->
+          <div class="detail-status ">
+            <div class="d-status " v-show="status == 1">
+              <span style="font-weight:lighter">秒杀倒计时</span>
+              <span style="font-weight:bold;color: #f30505;">{{dateRemainder}}</span>
+              <span style="font-weight:lighter">后</span>
+            </div>
+            <div class="d-status ing" v-show="status == 2">
+              <span style="font-weight:lighter">秒杀进行中</span>
+            </div>
+            <div class="d-status after" v-show="status == 3">
+              秒杀已结束
+            </div>
+            <div class="d-btn" @click="buy()">
+              立即抢购
+            </div>
+          </div>
         </div>
       </div>
     </transition>
@@ -124,6 +141,9 @@ export default {
         word: ''
       },
       listToDetail: true,
+      timeCounter: '',
+      dateRemainder: '00天00时00分00秒',
+      status: 1,
     };
   },
   components: {},
@@ -149,49 +169,97 @@ export default {
     },
     async jumpToDetail(id) {
       this.goodDetailFocus = await this.querySecKillGoodById(id);
-      console.log(this.goodDetailFocus);
+
+      // 1.首先先获取当前的时间戳
+      var nowDate = new Date();
+      // 2.再获取开始秒杀的时间戳
+      var startDate = new Date(this.goodDetailFocus.startDate);
+      // 3.再获取结束秒杀的时间戳
+      var endDate = new Date(this.goodDetailFocus.endDate);
+      if (startDate - nowDate > 0) {
+        // 倒计时
+        this.status = 1;
+        // 4.得到时间差
+        let count = (startDate - nowDate) / 1000
+        // 5.计算天时分
+        this.dateRemainder = this.getCountTime(count);
+      } else if (nowDate - endDate > 0) {
+        // 已结束
+        this.status = 3
+      } else {
+        // 进行中
+        this.status = 2
+        // TODO:
+      }
+
       this.listToDetail = !this.listToDetail
     },
     jumpToList() {
+      clearInterval(this.timeCounter)
       this.listToDetail = !this.listToDetail
+    },
+    getCountTime(count) {
+
+      // 5.拿到剩余时间后 获取天数 时分秒
+      let d = parseInt(count / 60 / 60 / 24)  //天数
+      d = d < 10 ? '0' + d : d;// 判断得出的结果小不小于10  自动补零
+      let h = parseInt(count / 60 / 60 % 24) //小时
+      h = h < 10 ? '0' + h : h;
+      let m = parseInt(count / 60 % 60) //分钟
+      m = m < 10 ? '0' + m : m;
+      let s = parseInt(count % 60) //秒
+      s = s < 10 ? '0' + s : s;
+
+      // console.log(` ${d}天${h}时${m}分${s}秒 `);
+      this.dateRemainder = ` ${d}天${h}时${m}分${s}秒 `
+
+      // 定时器
+      clearInterval(this.timeCounter)
+      this.timeCounter = setInterval(() => {
+        count = count - 1
+        this.getCountTime(count)
+      }, 1000)
+    },
+    buy() {
+      console.log(1);
     }
   },
   mounted: async function () {
     this.goodList = await this.queryAllSecKillGood(this.QueryVo)
     console.log('goodlist:', this.goodList);
   },
-  filters:{
-        formatDate: function(value,args) {
-            var dt = new Date(value);
-            if(args == 'yyyy-M-d') {// yyyy-M-d
-            let year = dt.getFullYear();
-            let month = dt.getMonth() + 1;
-            let date = dt.getDate();
-            return `${year}-${month}-${date}`;
-        } else if(args == 'yyyy-M-d H:m:s'){// yyyy-M-d H:m:s
-            let year = dt.getFullYear();
-            let month = dt.getMonth() + 1;
-            let date = dt.getDate();
-            let hour = dt.getHours();
-            let minute = dt.getMinutes();
-            let second = dt.getSeconds();
-            return `${year}-${month}-${date} ${hour}:${minute}:${second}`;
-        } else if(args == 'yyyy-MM-dd') {// yyyy-MM-dd
-            let year = dt.getFullYear();
-            let month = (dt.getMonth() + 1).toString().padStart(2,'0');
-            let date = dt.getDate().toString().padStart(2,'0');
-            return `${year}-${month}-${date}`;
-        } else {// yyyy-MM-dd HH:mm:ss
-            let year = dt.getFullYear();
-            let month = (dt.getMonth() + 1).toString().padStart(2,'0');
-            let date = dt.getDate().toString().padStart(2,'0');
-            let hour = dt.getHours().toString().padStart(2,'0');
-            let minute = dt.getMinutes().toString().padStart(2,'0');
-            let second = dt.getSeconds().toString().padStart(2,'0');
-            return `${year}-${month}-${date} ${hour}:${minute}:${second}`;
-        }
-        }
+  filters: {
+    formatDate: function (value, args) {
+      var dt = new Date(value);
+      if (args == 'yyyy-M-d') {// yyyy-M-d
+        let year = dt.getFullYear();
+        let month = dt.getMonth() + 1;
+        let date = dt.getDate();
+        return `${year}-${month}-${date}`;
+      } else if (args == 'yyyy-M-d H:m:s') {// yyyy-M-d H:m:s
+        let year = dt.getFullYear();
+        let month = dt.getMonth() + 1;
+        let date = dt.getDate();
+        let hour = dt.getHours();
+        let minute = dt.getMinutes();
+        let second = dt.getSeconds();
+        return `${year}-${month}-${date} ${hour}:${minute}:${second}`;
+      } else if (args == 'yyyy-MM-dd') {// yyyy-MM-dd
+        let year = dt.getFullYear();
+        let month = (dt.getMonth() + 1).toString().padStart(2, '0');
+        let date = dt.getDate().toString().padStart(2, '0');
+        return `${year}-${month}-${date}`;
+      } else {// yyyy-MM-dd HH:mm:ss
+        let year = dt.getFullYear();
+        let month = (dt.getMonth() + 1).toString().padStart(2, '0');
+        let date = dt.getDate().toString().padStart(2, '0');
+        let hour = dt.getHours().toString().padStart(2, '0');
+        let minute = dt.getMinutes().toString().padStart(2, '0');
+        let second = dt.getSeconds().toString().padStart(2, '0');
+        return `${year}-${month}-${date} ${hour}:${minute}:${second}`;
+      }
     }
+  }
 };
 </script>
 
@@ -436,7 +504,7 @@ export default {
       overflow: hidden;
     }
 
-    .detail-stock{
+    .detail-stock {
       position: absolute;
       right: 4%;
       top: 13%;
@@ -468,6 +536,57 @@ export default {
       overflow: hidden;
       line-height: 25px;
       color: #868686;
+    }
+  }
+
+  .detail-status {
+    position: absolute;
+    height: 10%;
+    width: 70%;
+    margin: auto;
+    bottom: 0;
+    top: 90%;
+    left: 0;
+    right: 0;
+
+    // background: #000;
+    .d-status {
+      position: absolute;
+      left: 0;
+      width: 55%;
+      height: 100%;
+      font-size: 35px;
+      text-align: center;
+      line-height: 80px;
+    }
+
+    .ing {
+      box-shadow: 2px 2px 20px #a54e4e;
+      background-color: #ca3535;
+      color: #fff;
+      border-radius: 10px;
+    }
+
+    .after{
+      box-shadow: 2px 2px 20px #6d6d6d;
+      background-color: #696969;
+      color: #fff;
+      border-radius: 10px;
+    }
+
+    .d-btn {
+      position: absolute;
+      right: 0;
+      width: 40%;
+      height: 100%;
+      box-shadow: 2px 2px 20px #57cefd;
+      background-color: #25ade2;
+      color: #fff;
+      border-radius: 10px;
+      font-size: 35px;
+      text-align: center;
+      line-height: 80px;
+      cursor: pointer;
     }
   }
 }
