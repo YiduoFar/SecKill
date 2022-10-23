@@ -38,10 +38,10 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         // 获取token
         String token = request.getHeader("authorization");
-        log.info("token : " + token);
+        log.info("请求中携带的token: " + token);
         if (!StringUtils.hasText(token)) {
             // 放行
-            log.info("放行了...");
+            log.info("放行了不携带token的请求...");
             filterChain.doFilter(request, response);
             return;
         }
@@ -51,13 +51,14 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             Claims claims = JwtUtil.parseJWT(token.split(" ")[1]);
             mobile = claims.getSubject();
         } catch (Exception e) {
+            log.info("token解析出错");
             throw new RuntimeException("token非法");
         }
-        System.out.println(2222);
         // 从redis中获取用户信息
         String redisKey = "login:" + mobile;
         LoginUser loginUser = redisCache.getCacheObject(redisKey);
         if (Objects.isNull(loginUser)) {
+            log.info("用户登录超时");
             throw new RuntimeException("登录超时");
         }
         // 存入SecurityContextHolder
@@ -66,5 +67,6 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         // 放行
         filterChain.doFilter(request, response);
+        log.info("放行了..来自" + loginUser.getUsername() + "携带token的请求");
     }
 }

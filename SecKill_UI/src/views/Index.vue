@@ -83,9 +83,9 @@
             <!-- 库存 -->
             <div class="detail-stock ">
               秒杀量:
-              <span style="font-weight:bold">{{goodDetailFocus.stock_count}}</span>
+              <span style="font-weight:bold">{{goodDetailFocus.stockCount}}</span>
               <br>
-              <span style="text-decoration:underline;"> 库存量:{{goodDetailFocus.good_stock}}+</span>
+              <span style="text-decoration:underline;"> 库存量:{{goodDetailFocus.goodStock}}+</span>
             </div>
             <!-- 时间 -->
             <div class="detail-time ">
@@ -104,7 +104,7 @@
             </div>
           </div>
           <!-- 秒杀状态 按钮 -->
-          <div class="detail-status ">
+          <div class="detail-status " >
             <div class="d-status " v-show="status == 1">
               <span style="font-weight:lighter">秒杀倒计时</span>
               <span style="font-weight:bold;color: #f30505;">{{dateRemainder}}</span>
@@ -113,10 +113,10 @@
             <div class="d-status ing" v-show="status == 2">
               <span style="font-weight:lighter">秒杀进行中</span>
             </div>
-            <div class="d-status after" v-show="status == 3">
+            <div class="d-status after" id="d-end" v-show="status == 3">
               秒杀已结束
             </div>
-            <div class="d-btn" @click="buy()">
+            <div class="d-btn" id="d-btn" @click="status == 2 ? buy(goodDetailFocus.id) : ()=>{return}">
               立即抢购
             </div>
           </div>
@@ -152,6 +152,7 @@ export default {
   methods: {
     ...mapActions("good", ["queryAllSecKillGood"]),
     ...mapActions("good", ["querySecKillGoodById"]),
+    ...mapActions("seckill", ["doSecKill"]),
     async hello() {
       this.data = await this.$request.get('/hello')
     },
@@ -192,6 +193,25 @@ export default {
         // TODO:
       }
 
+      // 按钮状态
+      if (this.status == 2) {
+        document.getElementById("d-btn").classList.remove("btn-disable")
+        document.getElementById("d-btn").classList.remove("btn-enable-not-allowed")
+        document.getElementById("d-btn").classList.remove("btn-sleep")
+        document.getElementById("d-btn").classList.add("btn-enable-pointer")
+        document.getElementById("d-btn").classList.add("btn-active")
+      } else if (this.status == 3){
+        document.getElementById("d-btn").classList.remove("btn-enable")
+        document.getElementById("d-end").classList.add("status-width100")
+        document.getElementById("d-btn").classList.add("btn-disable")
+      } else {
+        document.getElementById("d-btn").classList.remove("btn-disable")
+        document.getElementById("d-btn").classList.remove("btn-enable-pointer")
+        document.getElementById("d-btn").classList.remove("btn-active")
+        document.getElementById("d-btn").classList.add("btn-enable-not-allowed")
+        document.getElementById("d-btn").classList.add("btn-sleep")
+      }
+
       this.listToDetail = !this.listToDetail
     },
     jumpToList() {
@@ -220,8 +240,8 @@ export default {
         this.getCountTime(count)
       }, 1000)
     },
-    buy() {
-      console.log(1);
+    async buy(goodId) {
+      await console.log(this.doSecKill(goodId));
     }
   },
   mounted: async function () {
@@ -559,34 +579,68 @@ export default {
       text-align: center;
       line-height: 80px;
     }
-
+    .status-width100{
+      width: 100%;
+    }
+    .status-width55{
+      width: 55%;
+    }
     .ing {
       box-shadow: 2px 2px 20px #a54e4e;
       background-color: #ca3535;
       color: #fff;
-      border-radius: 10px;
+      // border-radius: 10px;
     }
 
-    .after{
+    .after {
       box-shadow: 2px 2px 20px #6d6d6d;
       background-color: #696969;
       color: #fff;
-      border-radius: 10px;
+      // border-radius: 10px;
     }
 
     .d-btn {
       position: absolute;
       right: 0;
-      width: 40%;
-      height: 100%;
-      box-shadow: 2px 2px 20px #57cefd;
-      background-color: #25ade2;
+      width: 35%;
+      height: 80%;
       color: #fff;
-      border-radius: 10px;
-      font-size: 35px;
+      top: 10%;
+      // border-radius: 10px;
+      font-size: 30px;
+      font-weight: lighter;
       text-align: center;
-      line-height: 80px;
+      line-height: 65px;
       cursor: pointer;
+    }
+
+    .btn-active {
+      // box-shadow: 2px 2px 20px #1c8ab6;
+      background-color: #209aca;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .btn-active:hover{
+      background-color: #40b7e6;
+    }
+
+    .btn-sleep {
+      box-shadow: 2px 2px 20px #525252;
+      background-color: #585858;
+      cursor:not-allowed;
+    }
+    .btn-enable-pointer{
+      cursor:pointer;
+      opacity: 1;
+    }
+    .btn-enable-not-allowed{
+      cursor:not-allowed;
+      opacity: 1;
+    }
+    .btn-disable{
+      cursor:default;
+      opacity: 0;
     }
   }
 }

@@ -5,12 +5,12 @@
 <mapper namespace="com.ayi.seckill.mapper.SeckillGoodMapper">
 
     <select id="selectGoodVoPage" resultType="com.ayi.seckill.vo.GoodVo">
-        SELECT sg.id,
+        SELECT sg.id seckill_id,
                sg.seckill_price,
                sg.stock_count,
                sg.start_date,
                sg.end_date,
-               g.id good_id,
+               g.id id,
                g.good_img,
                g.good_name,
                g.good_title,
@@ -24,12 +24,12 @@
     </select>
 
     <select id="selectGoodVoBySecKillGoodId"  resultType="com.ayi.seckill.vo.GoodVo">
-        SELECT sg.id,
+        SELECT sg.id seckill_id,
                sg.seckill_price,
                sg.stock_count,
                sg.start_date,
                sg.end_date,
-               g.id good_id,
+               g.id id,
                g.good_img,
                g.good_name,
                g.good_title,

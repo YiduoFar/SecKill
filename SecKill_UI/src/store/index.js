@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import login from './modules/login'
 import good from './modules/good'
+import seckill from './modules/seckill'
 
 Vue.use(Vuex)
 
@@ -14,6 +15,6 @@ export default new Vuex.Store({
   actions: {
   },
   modules: {
-    login, good
+    login, good, seckill
   }
 })
