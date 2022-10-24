@@ -17,7 +17,7 @@ public class SeckillOrder implements Serializable {
     /**
      * 秒杀订单id
      */
-    @TableId
+    @TableId(type = IdType.AUTO)
     private Long id;
 
     /**

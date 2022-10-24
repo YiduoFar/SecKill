@@ -41,9 +41,7 @@ axios.interceptors.request.use((req) => {
 axios.interceptors.response.use((res) => {
     //TODO:
     const { code, message, obj } = res.data;
-    console.log('code-->', code);
-    console.log('message-->', message);
-    console.log('data-->', obj);
+    console.log('code:', code, 'message:', message, 'data:', obj);
     if (code === 200) {
         if (res.config.url == '/login') {
             return {code, obj}

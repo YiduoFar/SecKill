@@ -19,22 +19,22 @@
             </div>
             <!-- 名字、标题 -->
             <div class="good-name ">
-              <span style="font-weight: bold;">{{g.goodName}}</span>
+              <span style="font-weight: bold;">{{ g.goodName }}</span>
               <br>
-              {{g.good_title}}
+              {{ g.good_title }}
             </div>
             <!-- 库存 -->
             <div class="good_stock ">
-              库存量: <span style="color:tomato;">{{g.goodStock}}</span> 件
+              库存量: <span style="color:tomato;">{{ g.goodStock }}</span> 件
             </div>
             <!-- 付款人数 -->
             <div class="good_pay_num">
-              <span style="color:#5a5a5a">{{(g.goodPayNum)}}+ 人付款</span>
+              <span style="color:#5a5a5a">{{ (g.goodPayNum) }}+ 人付款</span>
             </div>
             <!-- 秒杀价、原价 -->
             <div class="good_price">
-              <div style="color:#f30505;font-weight: bold;font-size:17px">秒杀价:{{g.seckillPrice}}￥</div>
-              <div style="color:#5a5a5a;margin-top: 5px;text-decoration: line-through;">原价:{{g.goodPrice}}￥</div>
+              <div style="color:#f30505;font-weight: bold;font-size:17px">秒杀价:{{ g.seckillPrice }}￥</div>
+              <div style="color:#5a5a5a;margin-top: 5px;text-decoration: line-through;">原价:{{ g.goodPrice }}￥</div>
             </div>
             <!-- 跳转详情 -->
             <div class="jump" @click="jumpToDetail(g.id)">
@@ -64,50 +64,50 @@
             </div>
             <!-- 名称 -->
             <div class="detail-name ">
-              <span style="font-size: 25px;">{{goodDetailFocus.goodName}}</span>
+              <span style="font-size: 25px;">{{ goodDetailFocus.goodName }}</span>
               <br>
-              <span style="font-size: 16px;">{{goodDetailFocus.goodTitle}}</span>
+              <span style="font-size: 16px;">{{ goodDetailFocus.goodTitle }}</span>
             </div>
             <!-- 价格 -->
             <div class="detail-price ">
               <span style="font-size: 25px;color: #f30505;font-weight: bold;">
                 秒杀价：
-                {{goodDetailFocus.seckillPrice}}.00￥
+                {{ goodDetailFocus.seckillPrice }}.00￥
               </span>
               <br>
               <span style="text-decoration: line-through;">
                 原价：
-                {{goodDetailFocus.goodPrice}}.00￥
+                {{ goodDetailFocus.goodPrice }}.00￥
               </span>
             </div>
             <!-- 库存 -->
             <div class="detail-stock ">
               秒杀量:
-              <span style="font-weight:bold">{{goodDetailFocus.stockCount}}</span>
+              <span style="font-weight:bold">{{ goodDetailFocus.stockCount }}</span>
               <br>
-              <span style="text-decoration:underline;"> 库存量:{{goodDetailFocus.goodStock}}+</span>
+              <span style="text-decoration:underline;"> 库存量:{{ goodDetailFocus.goodStock }}+</span>
             </div>
             <!-- 时间 -->
             <div class="detail-time ">
               <span style="color: #000;">秒杀时间</span>
               <br>
-              {{goodDetailFocus.startDate|formatDate('yyyy-MM-dd HH:mm:ss')}}（开始）
+              {{ goodDetailFocus.startDate | formatDate('yyyy-MM-dd HH:mm:ss') }}（开始）
               <br>
-              {{goodDetailFocus.endDate|formatDate('yyyy-MM-dd HH:mm:ss')}}（结束）
+              {{ goodDetailFocus.endDate | formatDate('yyyy-MM-dd HH:mm:ss') }}（结束）
             </div>
             <!-- 商品详情 -->
             <div class="detail-detail ">
               <span style="font-size: 18px;font-weight: bold;color: #4d4d4d;">详情:</span>
-              {{goodDetailFocus.goodDetail}}
+              {{ goodDetailFocus.goodDetail }}
               <br>
               ......
             </div>
           </div>
           <!-- 秒杀状态 按钮 -->
-          <div class="detail-status " >
+          <div class="detail-status ">
             <div class="d-status " v-show="status == 1">
               <span style="font-weight:lighter">秒杀倒计时</span>
-              <span style="font-weight:bold;color: #f30505;">{{dateRemainder}}</span>
+              <span style="font-weight:bold;color: #f30505;">{{ dateRemainder }}</span>
               <span style="font-weight:lighter">后</span>
             </div>
             <div class="d-status ing" v-show="status == 2">
@@ -116,7 +116,7 @@
             <div class="d-status after" id="d-end" v-show="status == 3">
               秒杀已结束
             </div>
-            <div class="d-btn" id="d-btn" @click="status == 2 ? buy(goodDetailFocus.id) : ()=>{return}">
+            <div class="d-btn" id="d-btn" @click="status == 2 ? buy(goodDetailFocus.id) : () => { return }">
               立即抢购
             </div>
           </div>
@@ -200,7 +200,7 @@ export default {
         document.getElementById("d-btn").classList.remove("btn-sleep")
         document.getElementById("d-btn").classList.add("btn-enable-pointer")
         document.getElementById("d-btn").classList.add("btn-active")
-      } else if (this.status == 3){
+      } else if (this.status == 3) {
         document.getElementById("d-btn").classList.remove("btn-enable")
         document.getElementById("d-end").classList.add("status-width100")
         document.getElementById("d-btn").classList.add("btn-disable")
@@ -241,7 +241,13 @@ export default {
       }, 1000)
     },
     async buy(goodId) {
-      await console.log(this.doSecKill(goodId));
+      var order = await this.doSecKill(goodId);
+      console.log('order', order);
+      console.log('orderId', order.id);
+      if (order != null) {
+        window.localStorage.setItem('orderId', order.id)
+        this.$router.push('/orderDetail')
+      }
     }
   },
   mounted: async function () {
@@ -579,12 +585,15 @@ export default {
       text-align: center;
       line-height: 80px;
     }
-    .status-width100{
+
+    .status-width100 {
       width: 100%;
     }
-    .status-width55{
+
+    .status-width55 {
       width: 55%;
     }
+
     .ing {
       box-shadow: 2px 2px 20px #a54e4e;
       background-color: #ca3535;
@@ -621,25 +630,28 @@ export default {
       cursor: pointer;
     }
 
-    .btn-active:hover{
+    .btn-active:hover {
       background-color: #40b7e6;
     }
 
     .btn-sleep {
       box-shadow: 2px 2px 20px #525252;
       background-color: #585858;
-      cursor:not-allowed;
+      cursor: not-allowed;
     }
-    .btn-enable-pointer{
-      cursor:pointer;
+
+    .btn-enable-pointer {
+      cursor: pointer;
       opacity: 1;
     }
-    .btn-enable-not-allowed{
-      cursor:not-allowed;
+
+    .btn-enable-not-allowed {
+      cursor: not-allowed;
       opacity: 1;
     }
-    .btn-disable{
-      cursor:default;
+
+    .btn-disable {
+      cursor: default;
       opacity: 0;
     }
   }

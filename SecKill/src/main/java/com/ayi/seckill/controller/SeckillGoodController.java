@@ -48,63 +48,10 @@ public class SeckillGoodController extends ApiController {
      * 根据id查询
      */
     @GetMapping("/querySecKillGoodById")
-    public RespBean selectById(@RequestParam("id") Integer id) {
+    public RespBean selectById(@RequestParam("id") Long id) {
         return seckillGoodService.selectById(id);
     }
-    /**
-     * 分页查询所有数据
-     *
-     * @param page        分页对象
-     * @param seckillGood 查询实体
-     * @return 所有数据
-     */
-    @GetMapping
-    public R selectAll(Page<SeckillGood> page, SeckillGood seckillGood) {
-        return success(this.seckillGoodService.page(page, new QueryWrapper<>(seckillGood)));
-    }
 
-    /**
-     * 通过主键查询单条数据
-     *
-     * @param id 主键
-     * @return 单条数据
-     */
-    @GetMapping("{id}")
-    public R selectOne(@PathVariable Serializable id) {
-        return success(this.seckillGoodService.getById(id));
-    }
 
-    /**
-     * 新增数据
-     *
-     * @param seckillGood 实体对象
-     * @return 新增结果
-     */
-    @PostMapping
-    public R insert(@RequestBody SeckillGood seckillGood) {
-        return success(this.seckillGoodService.save(seckillGood));
-    }
-
-    /**
-     * 修改数据
-     *
-     * @param seckillGood 实体对象
-     * @return 修改结果
-     */
-    @PutMapping
-    public R update(@RequestBody SeckillGood seckillGood) {
-        return success(this.seckillGoodService.updateById(seckillGood));
-    }
-
-    /**
-     * 删除数据
-     *
-     * @param idList 主键结合
-     * @return 删除结果
-     */
-    @DeleteMapping
-    public R delete(@RequestParam("idList") List<Long> idList) {
-        return success(this.seckillGoodService.removeByIds(idList));
-    }
 }
 

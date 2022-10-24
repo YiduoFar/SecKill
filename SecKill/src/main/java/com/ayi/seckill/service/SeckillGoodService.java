@@ -14,5 +14,7 @@ public interface SeckillGoodService extends IService<SeckillGood> {
 
     RespBean selectByKeyWord(QueryVo queryVo);
 
-    RespBean selectById(Integer id);
+    RespBean selectById(Long id);
+
+    RespBean selectGoodVoBySecKillGoodId(Long id);
 }

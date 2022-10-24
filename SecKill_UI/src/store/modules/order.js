@@ -14,12 +14,13 @@ export default ({
     mutations: {
     },
     actions: {
-        doSecKill(state, goodId) {
+        queryOrderById(state, orderId) {
+            console.log('axios-orderId:', orderId);
             return axios({
-                url: '/doSecKill',
+                url: '/queryOrderById',
                 method: 'POST',
                 data: qs.stringify({
-                    goodId: goodId
+                    orderId: orderId
                 })
             })
         }

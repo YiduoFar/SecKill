@@ -1,30 +1,22 @@
 package com.ayi.seckill.service.impl;
 
-import com.ayi.seckill.domain.Good;
-import com.ayi.seckill.mapper.GoodMapper;
 import com.ayi.seckill.vo.GoodVo;
 import com.ayi.seckill.vo.QueryVo;
 import com.ayi.seckill.vo.RespBean;
 import com.ayi.seckill.vo.RespBeanEnum;
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ayi.seckill.domain.SeckillGood;
 import com.ayi.seckill.service.SeckillGoodService;
 import com.ayi.seckill.mapper.SeckillGoodMapper;
-import io.netty.util.internal.ObjectUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 /**
  * @author HuiBBao
@@ -61,13 +53,19 @@ public class SeckillGoodServiceImpl extends ServiceImpl<SeckillGoodMapper, Secki
     }
 
     @Override
-    public RespBean selectById(Integer id) {
+    public RespBean selectById(Long id) {
        GoodVo goodVo = seckillGoodMapper.selectGoodVoBySecKillGoodId(new QueryWrapper<>().eq("sg.id", id));
        if (ObjectUtils.isEmpty(goodVo)) {
            return RespBean.error(RespBeanEnum.NULL_DATA_ERROR);
        }
        return RespBean.success(goodVo);
     }
+
+    @Override
+    public RespBean selectGoodVoBySecKillGoodId(Long id) {
+        return RespBean.success(seckillGoodMapper.selectGoodVoBySecKillGoodId(new QueryWrapper<>().eq("sg.id", id)));
+    }
+
 }
 
 

@@ -5,18 +5,38 @@
 <mapper namespace="com.ayi.seckill.mapper.GoodMapper">
 
     <resultMap id="BaseResultMap" type="com.ayi.seckill.domain.Good">
-            <id property="id" column="id" jdbcType="BIGINT"/>
-            <result property="goodName" column="good_name" jdbcType="VARCHAR"/>
-            <result property="goodTitle" column="good_title" jdbcType="VARCHAR"/>
-            <result property="goodImg" column="good_img" jdbcType="VARCHAR"/>
-            <result property="goodDetail" column="good_detail" jdbcType="VARCHAR"/>
-            <result property="goodPrice" column="good_price" jdbcType="DECIMAL"/>
-            <result property="goodStock" column="good_stock" jdbcType="INTEGER"/>
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="goodName" column="good_name" jdbcType="VARCHAR"/>
+        <result property="goodTitle" column="good_title" jdbcType="VARCHAR"/>
+        <result property="goodImg" column="good_img" jdbcType="VARCHAR"/>
+        <result property="goodDetail" column="good_detail" jdbcType="VARCHAR"/>
+        <result property="goodPrice" column="good_price" jdbcType="DECIMAL"/>
+        <result property="goodStock" column="good_stock" jdbcType="INTEGER"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,good_name,good_title,
+        id
+        ,good_name,good_title,
         good_img,good_detail,good_price,
         good_stock
     </sql>
+
+    <select id="selectGoodVoByGoodId" resultType="com.ayi.seckill.vo.GoodVo">
+        SELECT g.id id,
+               g.good_img,
+               g.good_name,
+               g.good_title,
+               g.good_price,
+               g.good_detail,
+               g.good_pay_num,
+               g.good_stock,
+               sg.id seckill_id,
+               sg.seckill_price,
+               sg.stock_count,
+               sg.start_date,
+               sg.end_date
+        FROM good g
+                 LEFT JOIN seckill_good sg ON g.id = sg.good_id
+            ${ew.customSqlSegment}
+    </select>
 </mapper>

@@ -11,15 +11,15 @@ import lombok.Data;
 
 /**
  * 
- * @TableName order
+ * @TableName orders
  */
-@TableName(value ="order")
+@TableName(value ="orders")
 @Data
-public class Order implements Serializable {
+public class Orders implements Serializable {
     /**
      * id
      */
-    @TableId
+    @TableId(type = IdType.AUTO)
     private Long id;
 
     /**
@@ -60,7 +60,7 @@ public class Order implements Serializable {
     /**
      * 订单状态，0新建未支付，1已支付，2已发货，3已收货，4已退款，5已完成
      */
-    private Integer status;
+    private Integer orderStatus;
 
     /**
      * 订单创建时间

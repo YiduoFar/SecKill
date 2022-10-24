@@ -1,6 +1,7 @@
 package com.ayi.seckill.service;
 
 import com.ayi.seckill.domain.Good;
+import com.ayi.seckill.vo.GoodVo;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -10,4 +11,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface GoodService extends IService<Good> {
 
+
+    GoodVo findGoodVoByGoodId(Long goodId);
 }

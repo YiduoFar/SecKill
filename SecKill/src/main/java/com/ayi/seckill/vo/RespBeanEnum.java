@@ -18,6 +18,7 @@ public enum RespBeanEnum {
     ERROR(500, "服务器异常"),
     HTTP_STATUS_FORBIDDEN(403001, "权限不足"),
     HTTP_STATUS_UNAUTHORIZED(403002, "认证失败，请重新登录"),
+    NULL_DATA_ERROR(500400, "无数据"),
     // 登录模块
     LOGIN_ERROR(500210, "用户名或密码不正确"),
     MOBILE_ERROR(500211, "手机号码格式不正确"),
@@ -26,9 +27,10 @@ public enum RespBeanEnum {
     LOGIN_TIMEOUT_ERROR(500214, "用户未登录"),
     // 注册模块
     REG_ERROR(500310, "手机号已被注册"),
-    // 搜索模块
-    NULL_DATA_ERROR(500400, "无数据"),
-    ;
+    // 秒杀模块
+    EMPTY_STOCK_ERROR(500500, "库存不足"),
+    REPEAT_KILL_ERROR(500501, "禁止重复秒杀");
+
     private final Integer code;
     private final String message;
 }

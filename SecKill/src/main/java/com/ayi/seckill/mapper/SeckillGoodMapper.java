@@ -3,6 +3,7 @@ package com.ayi.seckill.mapper;
 import com.ayi.seckill.domain.SeckillGood;
 import com.ayi.seckill.vo.GoodVo;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Constants;
@@ -33,7 +34,8 @@ public interface SeckillGoodMapper extends BaseMapper<SeckillGood> {
     @MapKey("id")
     IPage<Map<String, Object>> selectGoodVoPage(Page page, @Param(Constants.WRAPPER) Wrapper queryWrapper);
 
-    GoodVo selectGoodVoBySecKillGoodId(@Param(Constants.WRAPPER) Wrapper queryWrapper);
+    GoodVo selectGoodVoBySecKillGoodId(@Param(Constants.WRAPPER) QueryWrapper queryWrapper);
+
 }
 
 
