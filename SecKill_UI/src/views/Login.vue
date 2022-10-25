@@ -79,6 +79,7 @@ export default {
         this.salt.charAt(5) +
         this.salt.charAt(4)
       );
+      console.log('md5', admin.password);
       const { code, obj } = await this.login(admin)
       if (code === 200) {
         this.user.mobile = this.user.password = ''

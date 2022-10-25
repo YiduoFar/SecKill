@@ -38,7 +38,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         // 获取token
         String token = request.getHeader("authorization");
-        log.info("请求中携带的token: " + token);
+        log.info("请求中携带的token:" + token);
         if (!StringUtils.hasText(token)) {
             // 放行
             log.info("放行了不携带token的请求...");

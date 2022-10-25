@@ -4,6 +4,47 @@ spring:
     url: jdbc:mysql://127.0.0.1:3306/seckill?useUnicode=true&charactorEncoding=UTF-8&serverTimezone=Asia/Shanghai
     username: "root"
     password: "0126"
+    hikari:
+      pool-name: DateHikariCP # 连接池名
+      minimum-idle: 5 # 最小空闲连接数
+      idle-timeout: 1800000 # 空闲连接存活最大时间，默认600000（10分钟）
+      maximum-pool-size: 10 # 最大连接数，默认10
+      auto-commit: true # 从连接池返回的连接自动提交
+      max-lifetime: 1800000 # 连接最大存货时间，0表示永久存活，默认1800000（30分钟）
+      connection-timeout: 30000 # 连接超时时间，默认30000（30秒）
+      connection-test-query: SELECT 1 # 测试连接是否可用的查询语句
+    # 使用druid数据源
+#    druid:
+#        # 初始化时建立物理连接的个数
+#      initial-size: 10
+#        # 连接池的最小空闲数量
+#      min-idle: 10
+#        # 连接池最大连接数量
+#      max-active: 200
+#        # 获取连接时最大等待时间，单位毫秒
+#      max-wait: 60000
+#        # 申请连接的时候检测，如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效。
+#      test-while-idle: true
+#        # 既作为检测的间隔时间又作为testWhileIdel执行的依据
+#      time-between-eviction-runs-millis: 60000
+#        # 销毁线程时检测当前连接的最后活动时间和当前时间差大于该值时，关闭当前连接(配置连接在池中的最小生存时间)
+#      min-evictable-idle-time-millis: 30000
+#        # 用来检测数据库连接是否有效的sql 必须是一个查询语句(oracle中为 select 1 from dual)
+#      validation-query: select 'x'
+#        # 申请连接时会执行validationQuery检测连接是否有效,开启会降低性能,默认为true
+#      test-on-borrow: false
+#        # 归还连接时会执行validationQuery检测连接是否有效,开启会降低性能,默认为true
+#      test-on-return: false
+#        # 是否缓存preparedStatement, 也就是PSCache,PSCache对支持游标的数据库性能提升巨大，比如说oracle,在mysql下建议关闭。
+#      pool-prepared-statements: false
+#      maxPoolPreparedStatementPerConnectionSize: 20 #设置PSCache值
+#      connectionErrorRetryAttempts: 3 # 连接出错后再尝试连接三次
+#      breakAfterAcquireFailure: true # 数据库服务宕机自动重连机制
+#      timeBetweenConnectErrorMillis: 300000 # 连接出错后重试时间间隔
+#      asyncInit: true # 异步初始化策略
+#      remove-abandoned: true # 是否自动回收超时连接
+#      remove-abandoned-timeout: 1800 # 超时时间(以秒数为单位)
+#      transaction-query-timeout: 6000 # 事务超时时间
   mvc:
     static-path-pattern: /static/**
 

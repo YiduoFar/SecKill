@@ -2,12 +2,15 @@ package com.ayi.seckill;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.ayi.seckill.controller.LoginController;
 import com.ayi.seckill.controller.SeckillGoodController;
 import com.ayi.seckill.domain.User;
 import com.ayi.seckill.mapper.OrdersMapper;
 import com.ayi.seckill.mapper.UserMapper;
 import com.ayi.seckill.service.impl.SeckillServiceImpl;
+import com.ayi.seckill.vo.LoginVo;
 import com.ayi.seckill.vo.QueryVo;
+import com.ayi.seckill.vo.RespBean;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -56,20 +59,15 @@ class SecKillApplicationTests {
         User user = new User();
         user.setId(2L);
         seckillServiceImpl.doSecKill(1L, user);
+    }
 
-//        Order order = new Order();
-//        order.setUserId(0L);
-//        order.setGoodId(0L);
-//        order.setDeliveryAddrId(0L);
-//        order.setGoodName("");
-//        order.setGoodCount(0);
-//        order.setGoodPrice(new BigDecimal("0"));
-//        order.setOrderChannel(0);
-//        order.setStatus(0);
-//        order.setCreateDate(new Date());
-//        order.setPayDate(new Date());
-//        int insert = orderMapper.insert(order);
-//        assert insert == 1;
+    @Autowired
+    LoginController loginController;
+
+    @Test
+    public void testLogin(){
+        RespBean login = loginController.login(new LoginVo("13168162412", "123456"));
+        System.out.println(login);
     }
 
 

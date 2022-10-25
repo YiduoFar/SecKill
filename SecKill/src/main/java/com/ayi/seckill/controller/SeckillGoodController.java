@@ -34,13 +34,14 @@ public class SeckillGoodController extends ApiController {
     private SeckillGoodService seckillGoodService;
 
     /**
+     * 优化前:339.5QPS
      * 分页查询所有数据
      * @param queryVo
      * @return
      */
     @PostMapping("/queryAllSecKillGood")
     public RespBean selectByKeyWord(QueryVo queryVo) {
-        System.out.println(queryVo);
+        System.out.println("queryVo:" + queryVo);
         return seckillGoodService.selectByKeyWord(queryVo);
     }
 
