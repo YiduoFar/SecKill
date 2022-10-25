@@ -144,6 +144,7 @@ export default {
       timeCounter: '',
       dateRemainder: '00天00时00分00秒',
       status: 1,
+      timer: ''
     };
   },
   components: {},
@@ -240,14 +241,22 @@ export default {
         this.getCountTime(count)
       }, 1000)
     },
-    async buy(goodId) {
-      var order = await this.doSecKill(goodId);
-      console.log('order', order);
-      console.log('orderId', order.id);
-      if (order != null) {
-        window.localStorage.setItem('orderId', order.id)
-        this.$router.push('/orderDetail')
-      }
+    /***
+     * 秒杀
+     */
+    buy(goodId) {
+      // 防抖按钮
+      clearTimeout(this.timer)
+      this.timer = setTimeout(async () => {
+        var order = await this.doSecKill(goodId);
+        console.log('order', order);
+        console.log('orderId', order.id);
+        if (order != null) {
+          window.localStorage.setItem('orderId', order.id)
+          this.$router.push('/orderDetail')
+        }
+      }, 800)
+
     }
   },
   mounted: async function () {
