@@ -30,6 +30,10 @@ public class LoginController {
         return RespBean.success("Hello!!!");
     }
 
+    /**
+     * 注销
+     * @return
+     */
     @GetMapping("/userLogout")
     public RespBean logo() {
         return loginService.logout();

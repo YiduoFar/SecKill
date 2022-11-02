@@ -21,6 +21,13 @@ public class SeckillController {
     @Autowired
     SeckillService seckillService;
 
+    /**
+     * 秒杀接口
+     * windows优化前 326.6 QPS
+     *
+     * @param goodId
+     * @return
+     */
     @PostMapping("/doSecKill")
     public RespBean doSecKill(Long goodId) {
         LoginUser principal = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
